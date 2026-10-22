@@ -1,0 +1,24 @@
+# HIFEN 0.5: kazi zinazoundwa na mtumiaji
+# Kazi hurahisisha kutumia tena msimbo bila kuurudia.
+
+tengeneza sentensi jina_la_mradi = "Hifen"
+
+# Kazi yenye kigeu kimoja
+ tengeneza kazi salimia(jina) {
+    andika("Habari " + jina)
+    andika("Karibu kwenye " + jina_la_mradi)
+}
+
+# Kazi isiyopokea vigeu
+tengeneza kazi ujumbe_wa_mwanzo() {
+    andika("Nimeanza kujifunza kazi za Hifen.")
+}
+
+ujumbe_wa_mwanzo()
+salimia("Godian")
+salimia("wanafunzi")
+
+# Kazi inaweza kuitwa ndani ya mzunguko
+rudia (3) {
+    salimia("Hifen")
+}

@@ -1,0 +1,24 @@
+# HIFEN 0.4: thamani za mantiki na maamuzi
+# Thamani za mantiki ni kweli na sikweli.
+
+tengeneza mantiki amesajiliwa = kweli
+tengeneza mantiki amelipa = sikweli
+
+andika(amesajiliwa)
+andika(amelipa)
+
+kama (amesajiliwa na si amelipa) {
+    andika("Umesajiliwa lakini bado hujalipa.")
+} vinginevyo {
+    andika("Hali yako imebadilika.")
+}
+
+badilisha amelipa = kweli
+
+kama (amesajiliwa na amelipa) {
+    andika("Karibu! Unaweza kuendelea.")
+}
+
+kama (sikweli au kweli) {
+    andika("AU inafanya kazi.")
+}

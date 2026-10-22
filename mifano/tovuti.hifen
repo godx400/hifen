@@ -1,6 +1,37 @@
-# Tovuti ya kwanza kwa Kiswahili
-UkurasaMtandao.weka_kichwa("Karibu Hifen")
-UkurasaMtandao.weka_maelezo("Tengeneza tovuti kwa lugha ya Kiswahili!")
-UkurasaMtandao.weka_kitufe("Anza kujifunza")
-UkurasaMtandao.weka_rangi("nyeusi")
-UkurasaMtandao.washa_server(8080)
+# HIFEN 0.4: tovuti yote inaelezwa kwenye faili moja.
+# DOCTYPE, HTML na CSS hutengenezwa na Hifen kwa ndani.
+
+tovuti "Hifen | Lugha ya Kiswahili" {
+    ukurasa {
+        kichwa "Karibu Hifen"
+        maelezo "Jenga tovuti na programu kwa kutumia Kiswahili rahisi."
+
+        sehemu "Lugha rahisi" {
+            kichwa_dogo "Andika Kiswahili"
+            aya "Unaandika maudhui na muonekano wako hapa. Hifen hutengeneza HTML na CSS kwa ndani."
+        }
+
+        sehemu "Muonekano unaobadilika" {
+            kichwa_dogo "Muundo unaojipanga"
+            aya "Badilisha rangi, nafasi, fonti na mpangilio bila kuandika CSS."
+            kitufe "Anza kujifunza"
+        }
+    }
+
+    mitindo {
+        fonti "system-ui, Arial, sans-serif"
+        rangi_ya_nyuma "#0f172a"
+        rangi_ya_maandishi "nyeupe"
+        rangi_ya_msingi "kijani"
+        padding 28
+        pengo 18
+        upana 960
+        pembe 22
+        ukubwa_wa_kichwa 48
+        mpangilio "wima"
+        panga "katikati"
+        kivuli kweli
+    }
+
+    seva 8080
+}
