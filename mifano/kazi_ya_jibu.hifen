@@ -1,0 +1,30 @@
+# HIFEN 0.6: kazi zinaweza kurudisha thamani kwa kutumia rudisha.
+
+# Kazi inayorudisha jumla ya namba mbili.
+tengeneza kazi jumlisha(a, b) {
+    rudisha a + b
+}
+
+tengeneza namba jibu = jumlisha(5, 3)
+andika(jibu)
+
+# Kazi inaweza kurudisha mantiki kweli au sikweli.
+tengeneza kazi ni_mtu_mzima(umri) {
+    kama (umri >= 18) {
+        rudisha kweli
+    }
+    rudisha sikweli
+}
+
+andika(ni_mtu_mzima(21))
+andika(ni_mtu_mzima(14))
+
+# Rudisha thamani kutoka ndani ya sharti na mzunguko.
+tengeneza kazi namba_ya_kwanza_chanya() {
+    rudia (5) {
+        rudisha 100
+    }
+    rudisha 0
+}
+
+andika(namba_ya_kwanza_chanya())

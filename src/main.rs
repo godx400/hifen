@@ -1,4 +1,4 @@
-//! Hifen 0.4: lugha ya Kiswahili yenye mantiki na muundo wa tovuti wa ndani.
+//! Hifen 0.6: lugha ya Kiswahili yenye kazi zinazoweza kurudisha thamani.
 //! Hakuna maktaba ya ziada: Rust standard library pekee.
 use std::collections::HashMap;
 use std::env;
@@ -119,6 +119,7 @@ enum Kauli {
     Rudia(Usemi, Vec<Kauli>),
     Tovuti(Tovuti),
     TengenezaKazi { jina: String, vigeu: Vec<String>, mwili: Vec<Kauli> },
+    Rudisha(Usemi),
 }
 struct Mchambuzi { tokens: Vec<Token>, i: usize }
 impl Mchambuzi {
@@ -199,6 +200,10 @@ impl Mchambuzi {
             return Err(kosa(n, "vinginevyo lazima ifuate amri ya kama."));
         }
 
+        if j == "rudisha" {
+            return Ok(Kauli::Rudisha(self.usemi(0)?));
+        }
+
         if j == "badilisha" {
             let jina = self.jina()?;
             if jina.contains('.') {
@@ -216,7 +221,7 @@ impl Mchambuzi {
                 if jina_kazi.contains('.') {
                     return Err(kosa(n, "Jina la kazi liwe neno moja bila nukta."));
                 }
-                if ["tengeneza", "andika", "kama", "vinginevyo", "rudia", "tovuti", "seva"].contains(&jina_kazi.as_str()) {
+                if ["tengeneza", "andika", "kama", "vinginevyo", "rudia", "rudisha", "tovuti", "seva"].contains(&jina_kazi.as_str()) {
                     return Err(kosa(n, "Jina hili limehifadhiwa na Hifen; chagua jina jingine."));
                 }
                 self.hitaji(AinaToken::Fungua, "Weka '(' baada ya jina la kazi.")?;
@@ -749,8 +754,8 @@ impl Mtendaji {
     }
 
     // Kazi zina wigo wake: zinaweza kusoma vigeu vya nje, lakini vigeu vya ndani
-    // na mabadiliko yake havivuji nje ya kazi. Kazi za toleo hili hazirudishi thamani.
-    fn endesha_kazi(&mut self, jina: &str, hoja: Vec<Thamani>) -> Result<(), String> {
+    // na mabadiliko yake havivuji nje ya kazi. Kazi zinaweza kurudisha thamani kwa 'rudisha'.
+    fn endesha_kazi(&mut self, jina: &str, hoja: Vec<Thamani>) -> Result<Option<Thamani>, String> {
         if self.kina_cha_wito >= 64 {
             return Err("Kazi zimeitana kwa kina kinachozidi kikomo cha 64.".into());
         }
@@ -773,10 +778,10 @@ impl Mtendaji {
 
     // Kila kizuizi hurithi vigeu vya nje. Mabadiliko ya vigeu vilivyokuwepo
     // yanaendelea baada ya kizuizi; vigeu vipya vilivyotengenezwa ndani hubaki vya ndani.
-    fn endesha_kizuizi(&mut self, programu: &[Kauli]) -> Result<(), String> {
+    fn endesha_kizuizi(&mut self, programu: &[Kauli]) -> Result<Option<Thamani>, String> {
         let vigeu_vya_awali = self.vigeu.clone();
         match self.endesha(programu) {
-            Ok(()) => {
+            Ok(jibu_la_rudisha) => {
                 let vigeu_vya_mwisho = self.vigeu.clone();
                 self.vigeu = vigeu_vya_awali;
                 for jina in self.vigeu.keys().cloned().collect::<Vec<_>>() {
@@ -784,7 +789,7 @@ impl Mtendaji {
                         self.vigeu.insert(jina, thamani.clone());
                     }
                 }
-                Ok(())
+                Ok(jibu_la_rudisha)
             }
             Err(kosa) => {
                 self.vigeu = vigeu_vya_awali;
@@ -837,6 +842,12 @@ impl Mtendaji {
             }
             Usemi::Wito(jina, hoja) => {
                 let args: Vec<Thamani> = hoja.iter().map(|a| self.tathmini(a)).collect::<Result<_,_>>()?;
+                if self.kazi.contains_key(jina) {
+                    return match self.endesha_kazi(jina, args)? {
+                        Some(thamani) => Ok(thamani),
+                        None => Err(format!("Kazi '{}' haijarudisha thamani. Ongeza amri 'rudisha'.", jina)),
+                    };
+                }
                 match jina.as_str() {
                     "AkiliMnemba.tengeneza_safu" => {
                         if args.len()!=2 { return Err("tengeneza_safu inahitaji vipimo viwili.".into()); }
@@ -858,7 +869,7 @@ impl Mtendaji {
             }
         }
     }
-    fn endesha(&mut self, programu: &[Kauli]) -> Result<(), String> {
+    fn endesha(&mut self, programu: &[Kauli]) -> Result<Option<Thamani>, String> {
         for k in programu {
             match k {
                 Kauli::Tengeneza(aina, jina, e) => {
@@ -896,7 +907,9 @@ impl Mtendaji {
                         _ => return Err("Sharti la 'kama' lazima liwe la kulinganisha, mfano umri >= 18.".into()),
                     };
                     if let Some(mwili) = chaguo {
-                        self.endesha_kizuizi(mwili)?;
+                        if let Some(jibu) = self.endesha_kizuizi(mwili)? {
+                            return Ok(Some(jibu));
+                        }
                     }
                 }
                 Kauli::Rudia(idadi, mwili) => {
@@ -910,7 +923,9 @@ impl Mtendaji {
                         return Err("Rudia imezidi kiwango cha mara 1,000,000.".into());
                     }
                     for _ in 0..mara {
-                        self.endesha_kizuizi(mwili)?;
+                        if let Some(jibu) = self.endesha_kizuizi(mwili)? {
+                            return Ok(Some(jibu));
+                        }
                     }
                 }
                 Kauli::TengenezaKazi { jina, vigeu, mwili } => {
@@ -933,7 +948,7 @@ impl Mtendaji {
                 Kauli::Tumia(Usemi::Wito(j, args)) => {
                     let a: Vec<Thamani> = args.iter().map(|x| self.tathmini(x)).collect::<Result<_,_>>()?;
                     if self.kazi.contains_key(j) {
-                        self.endesha_kazi(j, a)?;
+                        let _jibu_lililorudishwa = self.endesha_kazi(j, a)?;
                         continue;
                     }
                     match j.as_str() {
@@ -958,10 +973,16 @@ impl Mtendaji {
                         _ => return Err(format!("Amri '{}' haijatambulika.", j)),
                     }
                 }
+                Kauli::Rudisha(usemi) => {
+                    if self.kina_cha_wito == 0 {
+                        return Err("Amri 'rudisha' inaweza kutumika ndani ya kazi tu.".into());
+                    }
+                    return Ok(Some(self.tathmini(usemi)?));
+                }
                 _ => return Err("Amri haitambuliki.".into()),
             }
         }
-        Ok(())
+        Ok(None)
     }
 }
 fn main() {
@@ -974,7 +995,7 @@ fn main() {
         let msimbo = fs::read_to_string(&args[2]).map_err(|e| format!("Faili halijasomeka: {}",e))?;
         let tokens = chambua(&msimbo)?;
         let programu = Mchambuzi { tokens, i:0 }.programu()?;
-        Mtendaji::mpya().endesha(&programu)
+        Mtendaji::mpya().endesha(&programu).map(|_| ())
     })();
     if let Err(e) = matokeo { eprintln!("KOSA LA HIFEN: {}", e); std::process::exit(1); }
 }
