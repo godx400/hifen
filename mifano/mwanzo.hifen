@@ -1,0 +1,27 @@
+# HIFEN 0.2: aina za data, mahesabu, masharti na mizunguko
+
+tengeneza sentensi salamu = "Habari ya Tanzania!"
+tengeneza namba umri = 25
+tengeneza desimali pi = 3.14
+
+andika(salamu)
+andika(umri)
+andika(pi)
+andika("Jumla:")
+andika(10 + 5 * 2)
+
+# HIFEN hufanya maamuzi kwa kutumia kama na vinginevyo.
+kama (umri >= 18) {
+    andika("Wewe ni mtu mzima.")
+} vinginevyo {
+    andika("Bado hujatimiza miaka 18.")
+}
+
+# Rudia hutekeleza amri za ndani mara ulizotaja.
+rudia (3) {
+    andika("Ninajifunza kutengeneza Hifen.")
+}
+
+# Safu ya majaribio kwa mahesabu ya akili bandia.
+tengeneza mfumo_wa_ai = AkiliMnemba.tengeneza_safu(3, 3)
+andika(mfumo_wa_ai)

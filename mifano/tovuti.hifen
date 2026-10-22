@@ -1,0 +1,6 @@
+# Tovuti ya kwanza kwa Kiswahili
+UkurasaMtandao.weka_kichwa("Karibu Hifen")
+UkurasaMtandao.weka_maelezo("Tengeneza tovuti kwa lugha ya Kiswahili!")
+UkurasaMtandao.weka_kitufe("Anza kujifunza")
+UkurasaMtandao.weka_rangi("nyeusi")
+UkurasaMtandao.washa_server(8080)

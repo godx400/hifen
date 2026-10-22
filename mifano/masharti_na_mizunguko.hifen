@@ -1,0 +1,18 @@
+# Mifano ya masharti na mizunguko
+
+tengeneza namba alama = 82
+
+kama (alama >= 80) {
+    andika("Hongera! Umepata alama za juu.")
+} vinginevyo {
+    andika("Endelea kujifunza na kufanya mazoezi.")
+}
+
+rudia (5) {
+    andika("Hifen inaweza kurudia amri.")
+}
+
+# Alama zinazokubalika: ==, !=, <, <=, >, >=
+kama (alama != 0) {
+    andika("Alama si sifuri.")
+}

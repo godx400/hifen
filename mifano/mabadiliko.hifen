@@ -1,0 +1,32 @@
+# HIFEN 0.3: kubadilisha thamani za vigeu
+
+# Kigeu kinaanzishwa mara moja. Baadaye tumia "badilisha" kukibadilisha.
+tengeneza namba hesabu = 0
+
+rudia (5) {
+    badilisha hesabu = hesabu + 1
+    andika(hesabu)
+}
+
+andika("Hesabu ya mwisho ni:")
+andika(hesabu)
+
+# Tumia mabadiliko kufanya hesabu ya jumla.
+tengeneza namba jumla = 0
+tengeneza namba namba_ya_sasa = 1
+
+rudia (5) {
+    badilisha jumla = jumla + namba_ya_sasa
+    badilisha namba_ya_sasa = namba_ya_sasa + 1
+}
+
+andika("Jumla ya namba 1 hadi 5 ni:")
+andika(jumla)
+
+# Mabadiliko ndani ya sharti hubaki baada ya kutoka kwenye sharti.
+tengeneza namba alama = 50
+kama (alama < 100) {
+    badilisha alama = alama + 25
+}
+andika("Alama baada ya kubadilishwa:")
+andika(alama)

@@ -1,0 +1,7 @@
+tengeneza namba umri=10
+kama(umri>=18){
+    andika("unafaa kutumia mfumo huu")
+}
+vinginevyo {
+    andika("pole sana hujakidhi bado viwango vya kutumia lugha hii")
+}
